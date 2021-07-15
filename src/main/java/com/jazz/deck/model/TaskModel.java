@@ -5,6 +5,7 @@ public class TaskModel {
 	private Integer taskId;
 	private String title;
 	private String text;
+	private String printer;
 	
 	public TaskModel() {}
 	
@@ -33,8 +34,16 @@ public class TaskModel {
 		this.text = text;
 	}
 	
+	public String getPrinter() {
+		return printer;
+	}
+
+	public void setPrinter(String printer) {
+		this.printer = printer;
+	}
+
 	@Override
 	public String toString() {
-		return "TaskModel [taskId=" + taskId + ", title=" + title + ", text=" + text + "]";
+		return "TaskModel [taskId=" + taskId + ", title=" + title + ", text=" + text + ", printer=" + printer + "]";
 	}
 }

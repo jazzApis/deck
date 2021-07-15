@@ -7,44 +7,43 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import com.jazz.deck.model.PrinterModel;
+
 @Repository
 public class PrinterController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PrinterController.class);
-	private static final int DEFAULT_PRINTER = 0;
 	
-	private final List<String> printers = new ArrayList<>();
-	private int printerId = DEFAULT_PRINTER;
+	private final List<PrinterModel> printers = new ArrayList<>();
+	private PrinterModel printer;
 	
 	public PrinterController() {
-		printers.add("Xerox");
-		printers.add("HP DeskJet 5650");
-		printers.add("PDF Creator");
+		printers.add(new PrinterModel("Xerox", "Xerox Office HUB 1100"));
+		printers.add(new PrinterModel("HP5650", "HP DeskJet 5650"));
+		printers.add(new PrinterModel("PDF", "PDF Creator"));
+		printer = printers.get(0); 
 	}
 	
-	public List<String> get() {
+	public List<PrinterModel> get() {
 		return printers;
 	}
 
-	public String getSelected() {
-		return printers.get(getPrinterId());
+	public PrinterModel get(String code) {
+		final String normalized = PrinterModel.normalize(code);
+		return printers.stream()
+				.filter(printer -> printer.getCodeNormalized().equals(normalized))
+				.findFirst()
+				.orElse(null);		
+	}
+	public PrinterModel getSelected() {
+		return printer;
 	}
 	
-	public int setSelected(String printer) {
-		LOG.debug("Select printer " + printer);
-		setPrinterId(printers.indexOf(printer));
-		return getPrinterId();
-	}
-	
-	private int getPrinterId() {
-		return printerId;
-	}
-
-	private void setPrinterId(int printerId) {
-		if (printerId >= 0 && printerId < printers.size()) {
-			this.printerId = printerId;
-		} else {
-			LOG.error("Wrong printerId " + printerId);
+	public PrinterModel setSelected(String code) {
+		PrinterModel selected = get(code); 
+		if (selected != null) {
+			printer = selected ;
 		}
+		return printer;
 	}
 }

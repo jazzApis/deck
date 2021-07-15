@@ -1,6 +1,7 @@
 package com.jazz.deck.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +29,7 @@ public class PrinterRestController {
     @Autowired
     private PrinterController printer;
 
-    @RequestMapping(value="list", method=RequestMethod.GET)
+    @RequestMapping(value="/list", method=RequestMethod.GET)
     public DeckResponseModel printerList() {
     	try {
 	    	return DeckResponseModel.builder()
@@ -54,11 +55,11 @@ public class PrinterRestController {
 		}
     }
 
-    @RequestMapping(value="{name}", method=RequestMethod.PUT)
-    public DeckResponseModel selectPrinter(final String name) {
+    @RequestMapping(value="/{code}", method=RequestMethod.PUT)
+    public DeckResponseModel selectPrinter(@PathVariable("code") final String code) {
     	try {
 	    	return DeckResponseModel.builder()
-	    			.withItem(printer.setSelected(name))
+	    			.withItem(printer.setSelected(code))
 	    			.build();
 		} catch (Exception e) {
 			return DeckResponseModel.builder()
@@ -73,7 +74,7 @@ public class PrinterRestController {
     @Autowired
     private TaskController task;
 
-    @RequestMapping(value="tasks", method=RequestMethod.GET)
+    @RequestMapping(value="/tasks", method=RequestMethod.GET)
     public DeckResponseModel taskList() {
     	try {
 	    	return DeckResponseModel.builder()
@@ -86,8 +87,8 @@ public class PrinterRestController {
 		}
     }
 
-    @RequestMapping(value="{title}", method=RequestMethod.POST)
-    public DeckResponseModel taskQueue(final String title, final @RequestBody String text) {
+    @RequestMapping(value="/{title}", method=RequestMethod.POST)
+    public DeckResponseModel taskQueue(@PathVariable("title") final String title, final @RequestBody String text) {
     	try {
     		return DeckResponseModel.builder()
     				.withItem(task.add(title, text))
@@ -104,8 +105,8 @@ public class PrinterRestController {
     	return taskQueue(null, text);
     }
 
-    @RequestMapping(value="{taskId}", method=RequestMethod.DELETE)
-    public DeckResponseModel removeTask(final Integer taskId) {
+    @RequestMapping(value="/{taskId}", method=RequestMethod.DELETE)
+    public DeckResponseModel removeTask(@PathVariable("taskId") final Integer taskId) {
     	try {
     		return DeckResponseModel.builder()
     				.withItem(task.remove(taskId))
