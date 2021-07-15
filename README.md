@@ -1,7 +1,7 @@
 # deck
 Szkielet webowego api do kolejkowanego drukowania dokumentów 
 
-# requerements
+# requirements
 * Java Spring boot
 * Maven
 
