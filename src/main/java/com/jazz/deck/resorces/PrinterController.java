@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Controller;
 
 import com.jazz.deck.model.PrinterModel;
 
-@Repository
+@Controller
 public class PrinterController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PrinterController.class);
@@ -28,6 +28,10 @@ public class PrinterController {
 		return printers;
 	}
 
+	public String intro() {
+		return this.toString();
+	}
+	
 	public PrinterModel get(String code) {
 		final String normalized = PrinterModel.normalize(code);
 		return printers.stream()

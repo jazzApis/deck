@@ -107,14 +107,8 @@ public class PrinterRestController {
 
     @RequestMapping(value="/{taskId}", method=RequestMethod.DELETE)
     public DeckResponseModel removeTask(@PathVariable("taskId") final Integer taskId) {
-    	try {
-    		return DeckResponseModel.builder()
-    				.withItem(task.remove(taskId))
-    				.build();
-    	} catch (DeckException e) {
-    		return DeckResponseModel.builder()
-    				.withException(e)
-    				.build();
-    	}
+		return DeckResponseModel.builder()
+				.withItem(task.remove(taskId))
+				.build();
     }
 }

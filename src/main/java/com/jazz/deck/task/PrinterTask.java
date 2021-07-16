@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.jazz.deck.model.TaskModel;
+import com.jazz.deck.resorces.LogController;
 import com.jazz.deck.resorces.TaskController;
 
 // @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -18,6 +19,9 @@ public class PrinterTask {
     @Autowired
     private TaskController taskController;
 	
+    @Autowired
+    private LogController logController;
+	
 	@Scheduled(fixedDelay=15000)//15s
 	public void print(){
 		try {
@@ -25,6 +29,7 @@ public class PrinterTask {
 			if (task != null) {
 				LOG.info("Printing " + task.getTitle() + " on " + task.getPrinter());
 				taskController.remove(task);
+				logController.set("PRINT", task.getTitle());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage());

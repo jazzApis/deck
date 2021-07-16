@@ -7,12 +7,12 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Controller;
 
 import com.jazz.deck.exception.DeckException;
 import com.jazz.deck.model.TaskModel;
 
-@Repository
+@Controller
 public class TaskController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(PrinterController.class);
@@ -24,28 +24,32 @@ public class TaskController {
     @Autowired
     private PrinterController printerController;
 	
+    @Autowired
+    private LogController logController;
+	
 	public TaskController() {}
 	
 	public List<TaskModel> get() {
 		return tasks;
 	}
 
-	public TaskModel get(Integer taskId) throws DeckException {
+	public TaskModel get(Integer taskId) {
 		return tasks.stream()
 				.filter(task -> task.getTaskId() == taskId)
 				.findFirst()
 				.orElse(null);		
 	}
 
-	public TaskModel getFirst() throws DeckException {
+	public TaskModel getFirst() {
 		return tasks.size() > 0 ? tasks.get(0) : null;
 	}
 
-	public Boolean remove(int taskId) throws DeckException {
+	public Boolean remove(int taskId) {
+		logController.set("REMOVE", "Task #" + taskId);
 		return remove(get(taskId));
 	}
 
-	public Boolean remove(TaskModel task) throws DeckException {
+	public Boolean remove(TaskModel task) {
 		return task == null ? false : tasks.remove(task);
 	}
 
@@ -61,6 +65,7 @@ public class TaskController {
 		}
 		task.setPrinter(printerController.getSelected().getCode());
 		tasks.add(task);
+		logController.set("QUEUE", task.getTitle());
 		return task.getTaskId();
 	}
 	
